@@ -5,6 +5,8 @@ const port = 5000 || process.env.port;
 const mongoose = require("mongoose");
 const cors = require("cors");
 const categoryRoute = require("./routes/category.route");
+const roomRoute = require("./routes/room.route");
+const linkRoute = require("./routes/link.route");
 
 // Connect database mongodb
 const mongoURL =
@@ -27,6 +29,8 @@ app.use(express.static("public"));
 
 // use routes
 app.use("/category", categoryRoute);
+app.use("/room", roomRoute);
+app.use("/link", linkRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
