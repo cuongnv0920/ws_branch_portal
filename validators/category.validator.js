@@ -6,14 +6,14 @@ const validatorCreate = () => {
     check("name")
       .not()
       .isEmpty()
-      .withMessage("Vui lòng nhập Tên danh mục")
+      .withMessage("Vui lòng nhập Tên danh mục.")
       .custom((value) => {
         return Category.exists({ name: value })
           .where({ softDelete: "" })
           .then((category) => {
             if (category) {
               return Promise.reject(
-                "Tên danh mục đã tồn tại, vui lòng nhập Tên danh múc khác."
+                "Tên danh mục đã tồn tại, vui lòng nhập Tên danh mục khác."
               );
             }
           });
@@ -26,7 +26,7 @@ const validatorUpdate = () => {
     check("name")
       .not()
       .isEmpty()
-      .withMessage("Vui lòng nhập Tên danh mục")
+      .withMessage("Vui lòng nhập Tên danh mục.")
       .custom((value, { req }) => {
         return Category.findOne({
           _id: { $ne: req.params.id },
@@ -36,7 +36,7 @@ const validatorUpdate = () => {
           .then((category) => {
             if (category) {
               return Promise.reject(
-                "Tên danh mục đã tồn tại, vui lòng nhập Tên danh múc khác."
+                "Tên danh mục đã tồn tại, vui lòng nhập Tên danh mục khác."
               );
             }
           });

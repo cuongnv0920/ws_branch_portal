@@ -1,22 +1,23 @@
-const Category = require("../models/category.model");
+const Link = require("../models/link.model");
 const { validationResult } = require("express-validator");
 
 module.exports.list = async (req, res, next) => {
-  await Category.find()
+  await Link.find()
     .where({ softDelete: "" })
     .sort({ createdAt: -1 })
-    .exec((error, categorys) => {
+    .exec((error, links) => {
       if (error) return res.status(400).json(error);
 
-      return res.status(200).json(categorys.map(formatCategory));
+      return res.status(200).json(links.map(formatLink));
     });
 };
 
-function formatCategory(data) {
-  const { _id: id, name, createdAt } = data;
+function formatLink(data) {
+  const { _id: id, title, url, createdAt } = data;
   return {
     id,
-    name,
+    title,
+    url,
     createdAt,
   };
 }
@@ -34,11 +35,12 @@ module.exports.create = async (req, res, next) => {
   if (errors.length) {
     return res.status(400).json({ message: errors[0] });
   } else {
-    await Category.create({
-      name: req.body.name,
+    await Link.create({
+      title: req.body.title,
+      url: req.body.url,
     })
       .then(() => {
-        return res.status(200).json({ message: "Thêm danh mục thành công." });
+        return res.status(200).json({ message: "Thêm liên kết thành công." });
       })
       .catch((error) => {
         return res.status(400).json({ message: error });
@@ -59,12 +61,13 @@ module.exports.update = async (req, res, next) => {
   if (errors.length) {
     return res.status(400).json({ message: errors });
   } else {
-    await Category.updateOne(
+    await Link.updateOne(
       {
         _id: req.params.id,
       },
       {
-        name: req.body.name,
+        title: req.body.title,
+        url: req.body.url,
         updatedAt: Date.now(),
       }
     )
@@ -78,7 +81,7 @@ module.exports.update = async (req, res, next) => {
 };
 
 module.exports.delete = async (req, res, next) => {
-  await Category.updateOne(
+  await Link.updateOne(
     {
       _id: req.params.id,
     },
