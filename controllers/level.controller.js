@@ -1,23 +1,22 @@
-const Room = require("../models/room.model");
+const Level = require("../models/level.model");
 const { validationResult } = require("express-validator");
 
 module.exports.list = async (req, res, next) => {
-  await Room.find()
+  await Level.find()
     .where({ softDelete: "" })
     .sort({ createdAt: 1 })
-    .exec((error, rooms) => {
+    .exec((error, levels) => {
       if (error) return res.status(400).json(error);
 
-      return res.status(200).json(rooms.map(formatRoom));
+      return res.status(200).json(levels.map(formatLevel));
     });
 };
 
-function formatRoom(data) {
-  const { _id: id, name, code, createdAt } = data;
+function formatLevel(data) {
+  const { _id: id, name, createdAt } = data;
   return {
     id,
     name,
-    code,
     createdAt,
   };
 }
@@ -35,12 +34,11 @@ module.exports.create = async (req, res, next) => {
   if (errors.length) {
     return res.status(400).json({ message: errors[0] });
   } else {
-    await Room.create({
+    await Level.create({
       name: req.body.name,
-      code: req.body.code,
     })
       .then(() => {
-        return res.status(200).json({ message: "Thêm phòng/ ban thành công." });
+        return res.status(200).json({ message: "Thêm chức danh thành công." });
       })
       .catch((error) => {
         return res.status(400).json({ message: error });
@@ -61,13 +59,12 @@ module.exports.update = async (req, res, next) => {
   if (errors.length) {
     return res.status(400).json({ message: errors });
   } else {
-    await Room.updateOne(
+    await Level.updateOne(
       {
         _id: req.params.id,
       },
       {
         name: req.body.name,
-        code: req.body.code,
         updatedAt: Date.now(),
       }
     )
@@ -81,7 +78,7 @@ module.exports.update = async (req, res, next) => {
 };
 
 module.exports.delete = async (req, res, next) => {
-  await Room.updateOne(
+  await Level.updateOne(
     {
       _id: req.params.id,
     },

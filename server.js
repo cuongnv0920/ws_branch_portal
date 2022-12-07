@@ -7,6 +7,8 @@ const cors = require("cors");
 const categoryRoute = require("./routes/category.route");
 const roomRoute = require("./routes/room.route");
 const linkRoute = require("./routes/link.route");
+const levelRoute = require("./routes/level.route");
+const userRoute = require("./routes/user.route");
 
 // Connect database mongodb
 const mongoURL =
@@ -31,6 +33,8 @@ app.use(express.static("public"));
 app.use("/category", categoryRoute);
 app.use("/room", roomRoute);
 app.use("/link", linkRoute);
+app.use("/level", levelRoute);
+app.use("/user", userRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

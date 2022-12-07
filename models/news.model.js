@@ -28,17 +28,17 @@ const newsSchema = new Schema({
     default: true,
   },
 
-  categoryId: {
+  category: {
     type: Schema.Types.ObjectId,
     ref: "Categorys",
   },
 
-  commentId: {
+  comment: {
     type: Schema.Types.ObjectId,
     ref: "Comments",
   },
 
-  uploadId: {
+  upload: {
     type: Schema.Types.ObjectId,
     ref: "Uploads",
   },

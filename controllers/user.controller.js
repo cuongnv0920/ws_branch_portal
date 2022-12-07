@@ -1,23 +1,58 @@
-const Room = require("../models/room.model");
+const User = require("../models/user.model");
 const { validationResult } = require("express-validator");
+const md5 = require("md5");
+const defaultUser = require("../config/defaultUser");
+
+User.exists({ email: defaultUser.email }).then((user) => {
+  if (!user) {
+    return User.create({
+      email: defaultUser.email,
+      fullName: defaultUser.fullName,
+      password: md5(defaultUser.password),
+      role: defaultUser.role,
+      createdAt: Date.now(),
+    });
+  }
+});
 
 module.exports.list = async (req, res, next) => {
-  await Room.find()
+  await User.find()
     .where({ softDelete: "" })
+    .populate("room")
+    .populate("level")
     .sort({ createdAt: 1 })
-    .exec((error, rooms) => {
+    .exec((error, users) => {
       if (error) return res.status(400).json(error);
 
-      return res.status(200).json(rooms.map(formatRoom));
+      return res.status(200).json(users.map(formatUser));
     });
 };
 
-function formatRoom(data) {
-  const { _id: id, name, code, createdAt } = data;
+function formatUser(data) {
+  const {
+    _id: id,
+    fullName,
+    email,
+    room,
+    phone,
+    ext,
+    level,
+    sex,
+    role,
+    birthday,
+    createdAt,
+  } = data;
   return {
     id,
-    name,
-    code,
+    fullName,
+    email,
+    room,
+    phone,
+    ext,
+    level,
+    sex,
+    role,
+    birthday,
     createdAt,
   };
 }
@@ -35,12 +70,21 @@ module.exports.create = async (req, res, next) => {
   if (errors.length) {
     return res.status(400).json({ message: errors[0] });
   } else {
-    await Room.create({
-      name: req.body.name,
-      code: req.body.code,
+    await User.create({
+      fullName: req.body.fullName,
+      email: req.body.email,
+      password: md5(req.body.password),
+      room: req.body.room,
+      level: req.body.level,
+      phone: req.body.phone,
+      ext: req.body?.ext,
+      sex: req.body.sex,
+      role: req.body.role,
+      birthday: req.body.birthday,
+      createdAt: Date.now(),
     })
       .then(() => {
-        return res.status(200).json({ message: "Thêm phòng/ ban thành công." });
+        return res.status(200).json({ message: "Thêm người dùng thành công." });
       })
       .catch((error) => {
         return res.status(400).json({ message: error });
@@ -49,6 +93,12 @@ module.exports.create = async (req, res, next) => {
 };
 
 module.exports.update = async (req, res, next) => {
+  function hashPassword() {
+    if (req.body.password) {
+      return md5(req.body.password);
+    }
+  }
+
   const errors = [];
 
   const validationError = validationResult(req);
@@ -61,13 +111,21 @@ module.exports.update = async (req, res, next) => {
   if (errors.length) {
     return res.status(400).json({ message: errors });
   } else {
-    await Room.updateOne(
+    await User.updateOne(
       {
         _id: req.params.id,
       },
       {
-        name: req.body.name,
-        code: req.body.code,
+        fullName: req.body.fullName,
+        email: req.body.email,
+        password: hashPassword(),
+        room: req.body.room,
+        level: req.body.level,
+        phone: req.body.phone,
+        ext: req.body?.ext,
+        sex: req.body.sex,
+        role: req.body.role,
+        birthday: req.body.birthday,
         updatedAt: Date.now(),
       }
     )
@@ -81,7 +139,7 @@ module.exports.update = async (req, res, next) => {
 };
 
 module.exports.delete = async (req, res, next) => {
-  await Room.updateOne(
+  await User.updateOne(
     {
       _id: req.params.id,
     },
