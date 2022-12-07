@@ -4,7 +4,7 @@ const { validationResult } = require("express-validator");
 module.exports.list = async (req, res, next) => {
   await Link.find()
     .where({ softDelete: "" })
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: 1 })
     .exec((error, links) => {
       if (error) return res.status(400).json(error);
 

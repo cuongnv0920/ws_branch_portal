@@ -23,15 +23,33 @@ const userSchema = new Schema({
     require: [true, "Vui lòng nhập mật khẩu."],
   },
 
-  roomId: {
+  room: {
     type: mongoose.Schema.ObjectId,
     ref: "Rooms",
     require: [true, "Vui lòng chọn Phòng/ Ban quản lý."],
   },
 
-  contactId: {
+  level: {
     type: mongoose.Schema.ObjectId,
-    ref: "Contacts",
+    ref: "Levels",
+    require: [true, "Vui lòng chọn chức danh."],
+  },
+
+  phone: {
+    type: String,
+    require: [true, "Vui lòng nhập số điện thoại di động."],
+  },
+
+  ext: {
+    type: String,
+  },
+
+  sex: {
+    type: String,
+  },
+
+  birthday: {
+    type: Date,
   },
 
   status: {
@@ -39,12 +57,9 @@ const userSchema = new Schema({
     default: true,
   },
 
-  role: [
-    {
-      type: String,
-      default: "user",
-    },
-  ],
+  role: {
+    type: String,
+  },
 
   softDelete: {
     type: Date,
