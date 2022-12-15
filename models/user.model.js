@@ -13,6 +13,10 @@ const userSchema = new Schema({
     },
   },
 
+  username: {
+    type: String,
+  },
+
   fullName: {
     type: String,
     require: [true, "Vui lòng nhập họ và tên người dùng."],
@@ -59,6 +63,7 @@ const userSchema = new Schema({
 
   role: {
     type: String,
+    default: "user",
   },
 
   softDelete: {
