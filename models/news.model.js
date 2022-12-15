@@ -49,6 +49,7 @@ const newsSchema = new Schema({
 
   createdAt: {
     type: Date,
+    default: Date.now(),
   },
 
   updatedAt: {
