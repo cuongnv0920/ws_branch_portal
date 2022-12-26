@@ -23,9 +23,18 @@ const newsSchema = new Schema({
     type: String,
   },
 
-  status: {
+  hot: {
     type: Boolean,
-    default: true,
+  },
+
+  view: {
+    type: Number,
+    default: 0,
+  },
+
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "Users",
   },
 
   category: {
@@ -38,9 +47,12 @@ const newsSchema = new Schema({
     ref: "Comments",
   },
 
-  upload: {
-    type: Schema.Types.ObjectId,
-    ref: "Uploads",
+  file_1: {
+    type: String,
+  },
+
+  file_2: {
+    type: String,
   },
 
   softDelete: {
