@@ -12,6 +12,7 @@ const userRoute = require("./routes/user.route");
 const marginRoute = require("./routes/margin.route");
 const exchangeRateRoute = require("./routes/exchageRate.route");
 const newsRoute = require("./routes/news.route");
+const commentRoute = require("./routes/comment.route");
 
 // Connect database mongodb
 const mongoURL =
@@ -41,6 +42,7 @@ app.use("/user", userRoute);
 app.use("/margin", marginRoute);
 app.use("/exchangeRate", exchangeRateRoute);
 app.use("/news", newsRoute);
+app.use("/comment", commentRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
