@@ -7,6 +7,15 @@ const commentSchema = new Schema({
     ref: "Users",
   },
 
+  news: {
+    type: Schema.Types.ObjectId,
+    ref: "Users",
+  },
+
+  content: {
+    type: String,
+  },
+
   softDelete: {
     type: Date,
   },

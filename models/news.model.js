@@ -42,11 +42,6 @@ const newsSchema = new Schema({
     ref: "Categorys",
   },
 
-  comment: {
-    type: Schema.Types.ObjectId,
-    ref: "Comments",
-  },
-
   file_1: {
     type: String,
   },

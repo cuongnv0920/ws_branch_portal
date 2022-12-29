@@ -48,7 +48,7 @@ function formatNews(data) {
 }
 
 module.exports.detail = async (req, res, next) => {
-  await News.findById({ _id: req.params.id })
+  await News.findById(req.params.id)
     .where({ softDelete: "" })
     .populate("category")
     .populate("user")
@@ -58,7 +58,6 @@ module.exports.detail = async (req, res, next) => {
 
       return res.status(200).json(news);
     });
-  console.log(req.params.id);
 };
 
 module.exports.create = async (req, res, next) => {
