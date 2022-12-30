@@ -50,6 +50,23 @@ const newsSchema = new Schema({
     type: String,
   },
 
+  comment: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comments",
+    },
+  ],
+
+  countComment: {
+    type: Number,
+    default: 0,
+  },
+
+  blockComment: {
+    type: Boolean,
+    default: false,
+  },
+
   softDelete: {
     type: Date,
   },

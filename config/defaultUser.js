@@ -3,7 +3,7 @@ const defaultUser = {
   username: "admin",
   password: "abc@123",
   role: "admin",
-  fullName: "Tài khoản mặc định",
+  fullName: "Admin",
 };
 
 module.exports = defaultUser;

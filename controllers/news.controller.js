@@ -6,6 +6,11 @@ module.exports.list = async (req, res, next) => {
     .where({ softDelete: "" })
     .populate("category")
     .populate("user")
+    .populate("comment")
+    .populate({
+      path: "comment",
+      populate: { path: "user" },
+    })
     .populate()
     .sort({ createdAt: -1 })
     .exec((error, news) => {
@@ -23,6 +28,9 @@ function formatNews(data) {
     code,
     content,
     command,
+    comment,
+    countComment,
+    blockComment,
     file_1,
     file_2,
     hot,
@@ -38,6 +46,9 @@ function formatNews(data) {
     code,
     content,
     command,
+    comment,
+    countComment,
+    blockComment,
     file_1,
     file_2,
     hot,
@@ -47,12 +58,35 @@ function formatNews(data) {
   };
 }
 
+module.exports.get = async (req, res, next) => {
+  await News.findById(req.params.id)
+    .populate("category")
+    .populate("user")
+    .populate("comment")
+    .populate({
+      path: "comment",
+      populate: { path: "user" },
+    })
+    .populate()
+    .exec((error, news) => {
+      if (error) return res.status(400).json(error);
+
+      return res.status(200).json(news);
+    });
+};
+
 module.exports.detail = async (req, res, next) => {
   await News.findById(req.params.id)
     .where({ softDelete: "" })
     .populate("category")
     .populate("user")
+    .populate("comment")
+    .populate({
+      path: "comment",
+      populate: { path: "user" },
+    })
     .populate()
+    .sort({ createdAt: -1 })
     .exec((error, news) => {
       if (error) return res.status(400).json(error);
 
@@ -111,6 +145,7 @@ module.exports.create = async (req, res, next) => {
     code: req.body.code,
     content: req.body.content,
     command: req.body.command,
+    bockComment: req.body.bockComment,
     user: req.body.user,
     file_1: file_1()?.path,
     file_2: file_2()?.path,
@@ -124,17 +159,84 @@ module.exports.create = async (req, res, next) => {
     });
 };
 
-module.exports.update = async () => {};
+module.exports.update = async (req, res, next) => {
+  function file_1() {
+    if (req.files.file_1) {
+      const file_1 = req.files?.file_1[0];
+      return {
+        path: file_1.path.split("\\").slice(1).join("/"),
+        size: file_1.size,
+        originalname: file_1.originalname,
+        mimetype: file_1.mimetype,
+      };
+    }
+  }
 
-module.exports.delete = async () => {};
+  function file_2() {
+    if (req.files.file_2) {
+      const file_2 = req.files?.file_2[0] || {};
+      return {
+        path: file_2.path.split("\\").slice(1).join("/"),
+        size: file_2.size,
+        originalname: file_2.originalname,
+        mimetype: file_2.mimetype,
+      };
+    }
+  }
 
-// function file1() {
-//   if (req.file) {
-//     return req.file.path.split("\\").slice(1).join("/");
-//   } else {
-//     return "";
-//   }
-// }
-// if (file1() === "" || file1() === undefined) {
-//   return res.status(400).json({ message: "Vui lòng chọn file." });
-// }
+  const errors = [];
+
+  const validationError = validationResult(req);
+  if (!validationError.isEmpty()) {
+    Object.keys(validationError.mapped()).forEach((field) => {
+      errors.push(validationError.mapped()[field]["msg"]);
+    });
+  }
+
+  if (file_1()?.size > 8 * 1024 * 1024 || file_2()?.size > 8 * 1024 * 1024) {
+    return req
+      .status(400)
+      .json({ message: "File đính kèm không được vượt quá 8MB." });
+  }
+
+  await News.updateOne(
+    {
+      _id: req.params.id,
+    },
+    {
+      title: req.body.title,
+      category: req.body.category,
+      type: req.body.type,
+      code: req.body.code,
+      content: req.body.content,
+      command: req.body.command,
+      bockComment: req.body.bockComment,
+      file_1: file_1()?.path,
+      file_2: file_2()?.path,
+      hot: req.body.hot,
+    }
+  )
+    .then(() => {
+      return res.status(200).json({ message: "Sửa bài viết thành công." });
+    })
+    .catch((error) => {
+      return console.log(error);
+    });
+};
+
+module.exports.delete = async (req, res, next) => {
+  await News.updateOne(
+    {
+      _id: req.params.id,
+    },
+    {
+      softDelete: Date.now(),
+    }
+  )
+    .then(() => {
+      return res.status(200).json({ message: "Xóa thành công." });
+    })
+    .catch((error) => {
+      return res.status(400).json({ message: error });
+    });
+};

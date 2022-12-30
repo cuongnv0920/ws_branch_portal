@@ -27,7 +27,6 @@ module.exports.get = async (req, res, next) => {
   await Comment.findById(req.params.id)
     .where({ softDelete: "" })
     .populate("user")
-    .sort({ createdAt: -1 })
     .exec((error, comment) => {
       if (error) return res.status(400).json(error);
 
@@ -47,6 +46,8 @@ module.exports.create = async (req, res, next) => {
     .catch((error) => {
       return res.status(400).json({ message: error });
     });
+
+  next();
 };
 
 module.exports.update = async (req, res, next) => {
@@ -82,4 +83,6 @@ module.exports.delete = async (req, res, next) => {
     .catch((error) => {
       return res.status(400).json({ message: error });
     });
+
+  next();
 };

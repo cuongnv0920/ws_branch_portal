@@ -5,6 +5,7 @@ const controller = require("../controllers/news.controller");
 const upload = require("../config/storage.conf");
 
 router.get("/list", controller.list);
+router.get("/get/:id", controller.get);
 router.get("/detail/:id", controller.detail);
 router.post(
   "/create",
@@ -15,7 +16,15 @@ router.post(
   validator.validatorCreate(),
   controller.create
 );
-router.put("/update/:id", validator.validatorUpdate(), controller.update);
+router.put(
+  "/update/:id",
+  upload.fields([
+    { name: "file_1", maxCount: 1 },
+    { name: "file_2", maxCount: 1 },
+  ]),
+  validator.validatorUpdate(),
+  controller.update
+);
 router.put("/delete/:id", controller.delete);
 
 module.exports = router;
