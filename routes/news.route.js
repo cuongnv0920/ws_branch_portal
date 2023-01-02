@@ -4,7 +4,8 @@ const validator = require("../validators/news.validator");
 const controller = require("../controllers/news.controller");
 const upload = require("../config/storage.conf");
 
-router.get("/list", controller.list);
+router.get("/getAll", controller.getAll);
+router.get("/getFeatured/:page", controller.getFeatured);
 router.get("/get/:id", controller.get);
 router.get("/detail/:id", controller.detail);
 router.post(
