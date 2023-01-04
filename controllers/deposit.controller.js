@@ -1,45 +1,31 @@
-const Margin = require("../models/margin.model");
+const Deposit = require("../models/deposit.model");
 const { validationResult } = require("express-validator");
 
 module.exports.getAll = async (req, res, next) => {
-  await Margin.find()
+  await Deposit.find()
     .where({ softDelete: "" })
     .sort({ sort: 1 })
-    .exec((error, margins) => {
+    .exec((error, deposits) => {
       if (error) return res.status(400).json(error);
 
-      return res.status(200).json(margins.map(formatMargin));
+      return res.status(200).json(deposits.map(formatDeposit));
     });
 };
 
-function formatMargin(data) {
-  const {
-    _id: id,
-    ensign,
-    currency,
-    buyCash,
-    buyTransfer,
-    selling,
-    sort,
-    createdAt,
-  } = data;
+function formatDeposit(data) {
+  const { _id: id, term, vnd, usd, online, sort, createdAt } = data;
   return {
     id,
-    ensign,
-    currency,
-    buyCash,
-    buyTransfer,
-    selling,
+    term,
+    vnd,
+    usd,
+    online,
     sort,
     createdAt,
   };
 }
 
 module.exports.create = async (req, res, next) => {
-  const ensign = (name) => {
-    return `images/${name.slice(0, 3)}.png`;
-  };
-
   const errors = [];
 
   const validationError = validationResult(req);
@@ -52,33 +38,26 @@ module.exports.create = async (req, res, next) => {
   if (errors.length) {
     return res.status(400).json({ message: errors[0] });
   } else {
-    await Margin.create({
-      ensign: ensign(req.body.currency),
-      currency: req.body.currency,
-      buyCash: req.body.buyCash,
-      buyTransfer: req.body.buyTransfer,
-      selling: req.body.selling,
+    await Deposit.create({
+      term: req.body.term,
+      vnd: req.body.vnd,
+      usd: req.body.usd,
+      online: req.body.online,
       sort: req.body.sort,
       createdAt: Date.now(),
     })
       .then(() => {
         return res
           .status(200)
-          .json({ message: "Thêm biên độ ngoại tệ thành công." });
+          .json({ message: "Thêm biên Kỳ hạn lãi suất tiền gửi thành công." });
       })
       .catch((error) => {
         return res.status(400).json({ message: error });
       });
   }
-
-  next();
 };
 
 module.exports.update = async (req, res, next) => {
-  const ensign = (name) => {
-    return `images/${name.slice(0, 3)}.png`;
-  };
-
   const errors = [];
 
   const validationError = validationResult(req);
@@ -91,17 +70,16 @@ module.exports.update = async (req, res, next) => {
   if (errors.length) {
     return res.status(400).json({ message: errors });
   } else {
-    await Margin.updateOne(
+    await Deposit.updateOne(
       {
         _id: req.params.id,
       },
       {
-        ensign: ensign(req.body.currency),
-        currency: req.body.currency,
-        buyCash: req.body.buyCash,
-        buyTransfer: req.body.buyTransfer,
-        selling: req.body.selling,
+        term: req.body.term,
+        vnd: req.body.vnd,
+        usd: req.body.usd,
         sort: req.body.sort,
+        online: req.body.online,
         updatedAt: Date.now(),
       }
     )
@@ -112,12 +90,10 @@ module.exports.update = async (req, res, next) => {
         return res.status(400).json({ message: error });
       });
   }
-
-  next();
 };
 
 module.exports.delete = async (req, res, next) => {
-  await Margin.updateOne(
+  await Deposit.updateOne(
     {
       _id: req.params.id,
     },

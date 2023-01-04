@@ -1,28 +1,26 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const marginSchema = new Schema({
-  ensign: {
+const depositSchema = new Schema({
+  term: {
     type: String,
   },
 
-  currency: {
-    type: String,
+  vnd: {
+    type: Number,
   },
 
-  buyCash: {
+  usd: {
     type: Number,
-    default: 0,
   },
 
-  buyTransfer: {
+  online: {
     type: Number,
-    default: 0,
   },
 
-  selling: {
-    type: Number,
-    default: 0,
+  notification: {
+    type: Date,
+    default: new Date(),
   },
 
   sort: {
@@ -42,10 +40,10 @@ const marginSchema = new Schema({
   },
 });
 
-marginSchema.index({ "$**": "text" });
-const Margin = mongoose.model("Margin", marginSchema, "margin");
+depositSchema.index({ "$**": "text" });
+const Deposit = mongoose.model("Deposit", depositSchema, "deposit");
 
-const doc = new Margin();
+const doc = new Deposit();
 doc._id instanceof mongoose.Types.ObjectId;
 
-module.exports = Margin;
+module.exports = Deposit;

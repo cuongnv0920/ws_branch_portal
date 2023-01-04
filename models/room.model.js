@@ -12,12 +12,16 @@ const roomSchema = new Schema({
     require: [true, "Vui lòng nhập mã Phòng/ Ban."],
   },
 
+  sort: {
+    type: Number,
+  },
+
   softDelete: {
     type: Date,
   },
+
   createdAt: {
     type: Date,
-    default: Date.now(),
   },
 
   updatedAt: {

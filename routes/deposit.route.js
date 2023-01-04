@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const validator = require("../validators/category.validator");
-const controller = require("../controllers/category.controller");
+const validator = require("../validators/deposit.validator");
+const controller = require("../controllers/deposit.controller");
 
 router.get("/getAll", controller.getAll);
 router.post("/create", validator.validatorCreate(), controller.create);

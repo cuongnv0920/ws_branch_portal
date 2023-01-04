@@ -17,7 +17,7 @@ User.exists({ email: defaultUser.email }).then((user) => {
   }
 });
 
-module.exports.list = async (req, res, next) => {
+module.exports.getAll = async (req, res, next) => {
   await User.find()
     .where({ softDelete: "" })
     .populate("room")
@@ -56,6 +56,41 @@ function formatUser(data) {
     role,
     birthday,
     createdAt,
+  };
+}
+
+module.exports.getContact = async (req, res, next) => {
+  const roomId = req.query.roomId;
+  function room() {
+    if (!!roomId) {
+      return { room: roomId };
+    } else {
+      return {};
+    }
+  }
+
+  await User.find(room())
+    .where({ softDelete: "" })
+    .populate("room")
+    .populate("level")
+    .sort({ createdAt: 1 })
+    .exec((error, users) => {
+      if (error) return res.status(400).json(error);
+
+      return res.status(200).json(users.map(formatContact));
+    });
+};
+
+function formatContact(data) {
+  const { _id: id, fullName, email, room, phone, ext, level } = data;
+  return {
+    id,
+    fullName,
+    email,
+    room,
+    phone,
+    ext,
+    level,
   };
 }
 

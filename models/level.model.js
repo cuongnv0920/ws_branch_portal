@@ -7,13 +7,16 @@ const levelSchema = new Schema({
     require: [true, "Vui lòng nhập tên chức danh."],
   },
 
+  sort: {
+    type: Number,
+  },
+
   softDelete: {
     type: Date,
   },
 
   createdAt: {
     type: Date,
-    default: Date.now(),
   },
 
   updatedAt: {

@@ -3,6 +3,6 @@ const router = express.Router();
 
 const controller = require("../controllers/exchangeRate.controller");
 
-router.get("/list", controller.list);
+router.get("/getAll", controller.getAll);
 
 module.exports = router;

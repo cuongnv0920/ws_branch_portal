@@ -37,13 +37,16 @@ const exchangeRateSchema = new Schema({
     default: "",
   },
 
+  sort: {
+    type: Number,
+  },
+
   softDelete: {
     type: Date,
   },
 
   createdAt: {
     type: Date,
-    default: Date.now(),
   },
 
   updatedAt: {

@@ -1,10 +1,10 @@
 const Category = require("../models/category.model");
 const { validationResult } = require("express-validator");
 
-module.exports.list = async (req, res, next) => {
+module.exports.getAll = async (req, res, next) => {
   await Category.find()
     .where({ softDelete: "" })
-    .sort({ createdAt: 1 })
+    .sort({ sort: 1 })
     .exec((error, categorys) => {
       if (error) return res.status(400).json(error);
 
@@ -13,10 +13,11 @@ module.exports.list = async (req, res, next) => {
 };
 
 function formatCategory(data) {
-  const { _id: id, name, createdAt } = data;
+  const { _id: id, name, sort, createdAt } = data;
   return {
     id,
     name,
+    sort,
     createdAt,
   };
 }
@@ -36,6 +37,8 @@ module.exports.create = async (req, res, next) => {
   } else {
     await Category.create({
       name: req.body.name,
+      sort: req.body.sort,
+      createdAt: Date.now(),
     })
       .then(() => {
         return res.status(200).json({ message: "Thêm danh mục thành công." });
@@ -65,6 +68,7 @@ module.exports.update = async (req, res, next) => {
       },
       {
         name: req.body.name,
+        sort: req.body.sort,
         updatedAt: Date.now(),
       }
     )
