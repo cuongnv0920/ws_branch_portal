@@ -161,10 +161,10 @@ const update = async (req, res, next) => {
 
 // setInterval(update, 1000 * 60 * 1);
 
-module.exports.list = async (req, res, next) => {
+module.exports.getAll = async (req, res, next) => {
   await ExchangeRate.find()
     .where({ softDelete: "" })
-    .sort({ createdAt: 1 })
+    .sort({ sort: 1 })
     .exec((err, exchangeRates) => {
       if (err) return res.status(400).json(err);
 
@@ -180,6 +180,7 @@ function formatExchangeRate(data) {
     buyCash,
     buyTransfer,
     selling,
+    sort,
     notificationNumber,
     notificationDate,
     notificationHourd,
@@ -193,6 +194,7 @@ function formatExchangeRate(data) {
     buyCash,
     buyTransfer,
     selling,
+    sort,
     notificationNumber,
     notificationDate,
     notificationHourd,

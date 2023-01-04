@@ -67,13 +67,16 @@ const newsSchema = new Schema({
     default: false,
   },
 
+  sort: {
+    type: Number,
+  },
+
   softDelete: {
     type: Date,
   },
 
   createdAt: {
     type: Date,
-    default: Date.now(),
   },
 
   updatedAt: {

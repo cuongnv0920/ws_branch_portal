@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const linkSchema = new Schema({
-  title: {
+  name: {
     type: String,
     require: [true, "Vui lòng nhập Tên liên kết."],
   },
@@ -12,13 +12,16 @@ const linkSchema = new Schema({
     require: [true, "Vui lòng nhập đường dẫn tới liên kết."],
   },
 
+  sort: {
+    type: Number,
+  },
+
   softDelete: {
     type: Date,
   },
 
   createdAt: {
     type: Date,
-    default: Date.now(),
   },
 
   updatedAt: {

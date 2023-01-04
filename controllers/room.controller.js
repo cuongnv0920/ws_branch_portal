@@ -1,10 +1,10 @@
 const Room = require("../models/room.model");
 const { validationResult } = require("express-validator");
 
-module.exports.list = async (req, res, next) => {
+module.exports.getAll = async (req, res, next) => {
   await Room.find()
     .where({ softDelete: "" })
-    .sort({ createdAt: 1 })
+    .sort({ sort: 1 })
     .exec((error, rooms) => {
       if (error) return res.status(400).json(error);
 
@@ -13,11 +13,12 @@ module.exports.list = async (req, res, next) => {
 };
 
 function formatRoom(data) {
-  const { _id: id, name, code, createdAt } = data;
+  const { _id: id, name, code, sort, createdAt } = data;
   return {
     id,
     name,
     code,
+    sort,
     createdAt,
   };
 }
@@ -38,6 +39,8 @@ module.exports.create = async (req, res, next) => {
     await Room.create({
       name: req.body.name,
       code: req.body.code,
+      sort: req.body.sort,
+      createdAt: Date.now(),
     })
       .then(() => {
         return res.status(200).json({ message: "Thêm phòng/ ban thành công." });
@@ -68,6 +71,7 @@ module.exports.update = async (req, res, next) => {
       {
         name: req.body.name,
         code: req.body.code,
+        sort: req.body.sort,
         updatedAt: Date.now(),
       }
     )

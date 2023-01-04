@@ -16,9 +16,12 @@ const categorySchema = new Schema({
     type: Date,
   },
 
+  sort: {
+    type: Number,
+  },
+
   createdAt: {
     type: Date,
-    default: Date.now(),
   },
 
   updatedAt: {

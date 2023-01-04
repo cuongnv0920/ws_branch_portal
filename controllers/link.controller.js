@@ -1,10 +1,10 @@
 const Link = require("../models/link.model");
 const { validationResult } = require("express-validator");
 
-module.exports.list = async (req, res, next) => {
+module.exports.getAll = async (req, res, next) => {
   await Link.find()
     .where({ softDelete: "" })
-    .sort({ createdAt: 1 })
+    .sort({ sort: 1 })
     .exec((error, links) => {
       if (error) return res.status(400).json(error);
 
@@ -13,11 +13,12 @@ module.exports.list = async (req, res, next) => {
 };
 
 function formatLink(data) {
-  const { _id: id, title, url, createdAt } = data;
+  const { _id: id, name, url, sort, createdAt } = data;
   return {
     id,
-    title,
+    name,
     url,
+    sort,
     createdAt,
   };
 }
@@ -36,8 +37,10 @@ module.exports.create = async (req, res, next) => {
     return res.status(400).json({ message: errors[0] });
   } else {
     await Link.create({
-      title: req.body.title,
+      name: req.body.name,
       url: req.body.url,
+      sort: req.body.sort,
+      createdAt: Date.now(),
     })
       .then(() => {
         return res.status(200).json({ message: "Thêm liên kết thành công." });
@@ -66,8 +69,9 @@ module.exports.update = async (req, res, next) => {
         _id: req.params.id,
       },
       {
-        title: req.body.title,
+        name: req.body.name,
         url: req.body.url,
+        sort: req.body.sort,
         updatedAt: Date.now(),
       }
     )

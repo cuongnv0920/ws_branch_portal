@@ -1,6 +1,6 @@
 const Comment = require("../models/comment.model");
 
-module.exports.list = async (req, res, next) => {
+module.exports.getAll = async (req, res, next) => {
   await Comment.find()
     .where({ softDelete: "" })
     .populate("user")
@@ -39,6 +39,7 @@ module.exports.create = async (req, res, next) => {
     user: req.body.user,
     news: req.body.news,
     content: req.body.content,
+    createdAt: Date.now(),
   })
     .then(() => {
       return res.status(200).json({ message: "Gửi thành công." });

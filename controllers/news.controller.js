@@ -6,7 +6,7 @@ function escapeRegex(text) {
 }
 
 module.exports.getAll = async (req, res, next) => {
-  const limit = req.query._limit || 10;
+  const limit = req.query._limit || 8;
   const page = req.query._page || 1;
 
   function category() {
@@ -97,12 +97,31 @@ function formatNews(data) {
 }
 
 module.exports.getFeatured = async (req, res, next) => {
-  const limit = 5;
-  const page = req.params.page || 1;
+  const limit = req.query._limit || 5;
+  const page = req.query._page || 1;
 
-  await News.find()
-    .where({ softDelete: null })
-    .where({ hot: true })
+  function category() {
+    if (req.query._category) {
+      return { category: req.query._category };
+    } else {
+      return {};
+    }
+  }
+
+  function search() {
+    if (req.query._search) {
+      const regex = new RegExp(escapeRegex(req.query._search), "i");
+      return [{ title: regex }, { code: regex }];
+    } else {
+      return [{}];
+    }
+  }
+
+  await News.find({
+    $and: [{ softDelete: null }, { hot: true }],
+    $or: search(),
+  })
+    .where(category())
     .skip(limit * page - limit)
     .limit(limit)
     .populate("category")
@@ -146,6 +165,7 @@ function formatFeaturedNews(data) {
     hot,
     type,
     view,
+    sort,
     createdAt,
   } = data;
 
@@ -164,6 +184,7 @@ function formatFeaturedNews(data) {
     hot,
     type,
     view,
+    sort,
     createdAt,
   };
 }
@@ -255,11 +276,12 @@ module.exports.create = async (req, res, next) => {
     code: req.body.code,
     content: req.body.content,
     command: req.body.command,
-    bockComment: req.body.bockComment,
+    blockComment: req.body.blockComment,
     user: req.body.user,
     file_1: file_1()?.path,
     file_2: file_2()?.path,
     hot: req.body.hot,
+    createdAt: Date.now(),
   })
     .then(() => {
       return res.status(200).json({ message: "Thêm bài viết thành công." });
@@ -270,6 +292,7 @@ module.exports.create = async (req, res, next) => {
 };
 
 module.exports.update = async (req, res, next) => {
+  console.log(req.body);
   function file_1() {
     if (req.files.file_1) {
       const file_1 = req.files?.file_1[0];
@@ -320,7 +343,7 @@ module.exports.update = async (req, res, next) => {
       code: req.body.code,
       content: req.body.content,
       command: req.body.command,
-      bockComment: req.body.bockComment,
+      blockComment: req.body.blockComment,
       file_1: file_1()?.path,
       file_2: file_2()?.path,
       hot: req.body.hot,

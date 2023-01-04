@@ -3,17 +3,17 @@ const Link = require("../models/link.model");
 
 const validatorCreate = () => {
   return [
-    check("title")
+    check("name")
       .not()
       .isEmpty()
-      .withMessage("Vui lòng nhập Tiêu đề liên kết.")
+      .withMessage("Vui lòng nhập Tên liên kết.")
       .custom((value) => {
-        return Link.exists({ title: value })
+        return Link.exists({ name: value })
           .where({ softDelete: "" })
           .then((link) => {
             if (link) {
               return Promise.reject(
-                "Tiêu đề liên kết đã tồn tại, vui lòng nhập Tiêu đề liên kết khác."
+                "Tên liên kết đã tồn tại, vui lòng nhập Tên liên kết khác."
               );
             }
           });
@@ -39,20 +39,20 @@ const validatorCreate = () => {
 
 const validatorUpdate = () => {
   return [
-    check("title")
+    check("name")
       .not()
       .isEmpty()
-      .withMessage("Vui lòng nhập Tiêu đề liên kết.")
+      .withMessage("Vui lòng nhập Tên liên kết.")
       .custom((value, { req }) => {
         return Link.findOne({
           _id: { $ne: req.params.id },
-          title: { $eq: value },
+          name: { $eq: value },
         })
           .where({ softDelete: "" })
           .then((link) => {
             if (link) {
               return Promise.reject(
-                "Tiêu đề liên kết đã tồn tại, vui lòng nhập Tiêu đề liên kết khác."
+                "Tên liên kết đã tồn tại, vui lòng nhập Tên liên kết khác."
               );
             }
           });
