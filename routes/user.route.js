@@ -10,5 +10,6 @@ router.put("/update/:id", validator.validatorUpdate(), controller.update);
 router.put("/delete/:id", controller.delete);
 
 router.post("/login", controller.login);
+router.post("/loginAdmin", controller.loginAdmin);
 
 module.exports = router;
