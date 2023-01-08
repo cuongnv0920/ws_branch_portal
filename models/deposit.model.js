@@ -18,7 +18,7 @@ const depositSchema = new Schema({
     type: Number,
   },
 
-  notification: {
+  effect: {
     type: Date,
     default: new Date(),
   },

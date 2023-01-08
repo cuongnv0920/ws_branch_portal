@@ -121,7 +121,7 @@ module.exports.create = async (req, res, next) => {
       ext: req.body?.ext,
       sex: req.body.sex,
       role: req.body.role,
-      birthday: req.body.birthday,
+      birthday: new Date(req.body.birthday),
       createdAt: Date.now(),
     })
       .then((user) => {
@@ -137,6 +137,10 @@ module.exports.create = async (req, res, next) => {
 };
 
 module.exports.update = async (req, res, next) => {
+  const email = req.body.email;
+  const username = email.substring(0, email.indexOf("@"));
+  const token = jwt.sign({ user: "register" }, "shhhhh");
+
   function hashPassword() {
     if (req.body.password) {
       return md5(req.body.password);
@@ -161,7 +165,8 @@ module.exports.update = async (req, res, next) => {
       },
       {
         fullName: req.body.fullName,
-        email: req.body.email,
+        email: email,
+        username: username,
         password: hashPassword(),
         room: req.body.room,
         level: req.body.level,
@@ -169,12 +174,15 @@ module.exports.update = async (req, res, next) => {
         ext: req.body?.ext,
         sex: req.body.sex,
         role: req.body.role,
-        birthday: req.body.birthday,
+        birthday: new Date(req.body.birthday),
         updatedAt: Date.now(),
       }
     )
-      .then(() => {
-        return res.status(200).json({ message: "Cập nhật thành công." });
+      .then((user) => {
+        return res.status(200).json({
+          jwt: token,
+          user: user,
+        });
       })
       .catch((error) => {
         return res.status(400).json({ message: error });
