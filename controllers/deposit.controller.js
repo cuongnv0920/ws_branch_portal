@@ -1,5 +1,5 @@
 const Deposit = require("../models/deposit.model");
-const { validationResult } = require("express-validator");
+const { validationResult, body } = require("express-validator");
 
 module.exports.getAll = async (req, res, next) => {
   await Deposit.find()
@@ -13,13 +13,14 @@ module.exports.getAll = async (req, res, next) => {
 };
 
 function formatDeposit(data) {
-  const { _id: id, term, vnd, usd, online, sort, createdAt } = data;
+  const { _id: id, term, vnd, usd, online, effect, sort, createdAt } = data;
   return {
     id,
     term,
     vnd,
     usd,
     online,
+    effect,
     sort,
     createdAt,
   };
@@ -103,6 +104,16 @@ module.exports.delete = async (req, res, next) => {
   )
     .then(() => {
       return res.status(200).json({ message: "Xóa thành công." });
+    })
+    .catch((error) => {
+      return res.status(400).json({ message: error });
+    });
+};
+
+module.exports.effect = async (req, res, next) => {
+  await Deposit.updateMany({}, { effect: new Date(req.body.effect) })
+    .then(() => {
+      return res.status(200).json({ message: "Cập nhật thành công." });
     })
     .catch((error) => {
       return res.status(400).json({ message: error });
