@@ -1,9 +1,9 @@
 const express = require("express");
 
 const app = express();
-const port = 5000;
+const port = 3001;
 
-const root = require("path").join(__dirname, "src/admin");
+const root = require("path").join(__dirname, "src/admin/build");
 
 app.use(express.static(root));
 
