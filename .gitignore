@@ -8,7 +8,7 @@ node_modules/
 /public
 
 # src
-src/
+/src
 
 npm-debug.log*
 yarn-debug.log*
