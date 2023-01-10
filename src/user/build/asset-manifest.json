@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/static/css/main.58854f4d.css",
+    "main.js": "/static/js/main.9ba0e0d0.js",
+    "static/js/787.12640c60.chunk.js": "/static/js/787.12640c60.chunk.js",
+    "static/media/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2": "/static/media/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.955cc4e50baa5e6271a2.woff2",
+    "static/media/backdrop-birthday.jpg": "/static/media/backdrop-birthday.b462f1db90ff649ec745.jpg",
+    "static/media/7Aulp_0qiz-aVz7u3PJLcUMYOFnOkEk30eg.woff2": "/static/media/7Aulp_0qiz-aVz7u3PJLcUMYOFnOkEk30eg.afd871e9d9f6ac16bf93.woff2",
+    "static/media/7Aulp_0qiz-aVz7u3PJLcUMYOFnOkEk50eiNxw.woff2": "/static/media/7Aulp_0qiz-aVz7u3PJLcUMYOFnOkEk50eiNxw.9775790d3b65fdf6695f.woff2",
+    "static/media/7Aulp_0qiz-aVz7u3PJLcUMYOFnOkEk40eiNxw.woff2": "/static/media/7Aulp_0qiz-aVz7u3PJLcUMYOFnOkEk40eiNxw.cb65bdaf3044f9705aa5.woff2",
+    "index.html": "/index.html",
+    "main.58854f4d.css.map": "/static/css/main.58854f4d.css.map",
+    "main.9ba0e0d0.js.map": "/static/js/main.9ba0e0d0.js.map",
+    "787.12640c60.chunk.js.map": "/static/js/787.12640c60.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.58854f4d.css",
+    "static/js/main.9ba0e0d0.js"
+  ]
+}
